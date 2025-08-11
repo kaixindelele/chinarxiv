@@ -1,0 +1,2 @@
+# chinarxiv
+将gpt_academic的arxiv论文翻译单独抽取出来，更方便部署和集成arxiv论文翻译
