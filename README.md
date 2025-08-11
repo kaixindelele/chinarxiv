@@ -32,6 +32,14 @@
 
 ## 🚀 快速开始
 
+最简单的部署：
+```
+1. cd latex2pdf
+2. docker compose -f docker-compose-latex-server.yml up --build -d
+3. 编辑 config.py 文件，填入你的API配置；
+4. python arxiv_translator.py
+```
+
 ### 环境要求
 
 - Python 3.8+
@@ -329,16 +337,13 @@ translator = ArxivTranslator()
 ## 🙏 致谢
 
 - 感谢 [GPT Academic](https://github.com/binary-husky/gpt_academic) 项目提供的基础代码
-- 感谢OpenAI提供的GPT模型API
-- 感谢所有贡献者的支持
 
 ## 📞 联系方式
 
 如有问题或建议，请通过以下方式联系：
 
-- 提交Issue：[GitHub Issues](https://github.com/your-repo/chinarxiv/issues)
-- 邮箱：your-email@example.com
-
+- 提交Issue：[GitHub Issues](https://github.com/kaixindelele/chinarxiv/issues)
+- QQ群：816116844
 ---
 
 **注意**：使用本工具翻译论文时，请遵守相关的版权和学术规范，确保翻译结果仅用于学习和研究目的。
