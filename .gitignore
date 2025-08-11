@@ -7,3 +7,5 @@ latex2pdf/work/*
 output/*
 o3_prompt.md
 config.py
+translation_cache/*
+work/*
