@@ -436,6 +436,7 @@ def translate_arxiv_paper(arxiv_input: str,
                          output_dir: str = "./output",
                          api_key: str = "",
                          base_url: str = "",
+                         llm_model: str = "",
                          compile_pdf: bool = True) -> Tuple[bool, str]:
     """
     便捷函数：翻译arxiv论文（改进版，支持依赖文件）
@@ -459,7 +460,8 @@ def translate_arxiv_paper(arxiv_input: str,
         translator = ArxivTranslator(
             output_dir=output_dir,
             api_key=api_key,
-            base_url=base_url
+            base_url=base_url,
+            llm_model=llm_model
         )
         
         success, result, details = translator.translate_arxiv(
@@ -606,7 +608,10 @@ def main():
     success, result = translate_arxiv_paper(
         arxiv_input=test_arxiv_id,
         output_dir="./output",
-        compile_pdf=True  # 跳过PDF编译，避免重复测试
+        compile_pdf=True,  # 跳过PDF编译，避免重复测试
+        api_key=API_KEY,
+        base_url=BASE_URL,
+        llm_model=LLM_MODEL
     )
     
     if success:

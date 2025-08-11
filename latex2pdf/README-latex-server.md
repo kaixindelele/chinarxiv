@@ -111,47 +111,22 @@ DELETE /task/{task_id}
 
 ## 🚀 快速开始
 
-### 方式1：直接运行（推荐开发）
-
-#### 环境要求
-- Python 3.8+
-- LaTeX环境（TeX Live完整版）
-- 系统依赖：curl（用于健康检查）
-
-#### 安装依赖
-```bash
-cd latex2pdf
-pip install -r requirements-latex-server.txt
-```
-
-#### 启动服务器
-```bash
-python latex_compile_server.py
-```
-
-服务器将在 `http://localhost:9851` 启动
-
-#### 测试客户端
-```bash
-python latex_compile_client.py
-```
-
-### 方式2：Docker部署（推荐生产）
+### 方式：Docker部署（推荐生产）
 
 #### 构建和启动
 ```bash
 cd latex2pdf
-docker-compose -f docker-compose-latex-server.yml up --build -d
+docker compose -f docker-compose-latex-server.yml up --build -d
 ```
 
 #### 查看日志
 ```bash
-docker-compose -f docker-compose-latex-server.yml logs -f
+docker compose -f docker-compose-latex-server.yml logs -f
 ```
 
 #### 停止服务
 ```bash
-docker-compose -f docker-compose-latex-server.yml down
+docker compose -f docker-compose-latex-server.yml down
 ```
 
 ## 🔧 配置说明

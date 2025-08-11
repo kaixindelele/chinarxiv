@@ -612,7 +612,7 @@ translated content
             gpt_stats = self.gpt_caller.get_stats()
             print(f"- API调用统计: {gpt_stats}")
             
-                        # 判断整体是否成功
+            # 判断整体是否成功
             overall_success = self.translation_stats['failed_segments'] == 0
             
             if overall_success:
