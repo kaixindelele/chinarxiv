@@ -1,0 +1,9 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+arxiv_cache/*
+latex2pdf/work/*
+output/*
+o3_prompt.md
+config.py

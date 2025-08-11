@@ -1,0 +1,68 @@
+# LaTeX编译服务器Docker配置文件
+# 基于现有的TeXLive镜像构建轻量级编译服务
+
+FROM fuqingxu/11.3.1-runtime-ubuntu20.04-with-texlive:latest
+
+# 设置工作目录
+WORKDIR /app
+
+# 安装Python和必要的包，包括xelatex依赖和中文字体，以及wget和unzip
+RUN apt-get update && apt-get install -y \
+    python3 \
+    python3-pip \
+    curl \
+    wget \
+    unzip \
+    fontconfig \
+    libfontconfig1 \
+    fonts-wqy-microhei \
+    fonts-wqy-zenhei \
+    fonts-arphic-ukai \
+    fonts-arphic-uming \
+    fonts-noto-cjk \
+    fonts-noto-cjk-extra \
+    xfonts-wqy \
+    && rm -rf /var/lib/apt/lists/* \
+    && fc-cache -fv
+
+# 安装Fandol字体（ctex默认字体）- 修复wget问题
+RUN mkdir -p /usr/share/fonts/truetype/fandol && \
+    cd /tmp && \
+    wget -q --timeout=30 --tries=3 https://mirrors.ctan.org/fonts/fandol.zip && \
+    unzip -q fandol.zip && \
+    cp fandol/*.otf /usr/share/fonts/truetype/fandol/ && \
+    rm -rf fandol* && \
+    fc-cache -fv
+
+# 配置ctex使用系统字体
+RUN mkdir -p /usr/local/texlive/texmf-local/tex/latex/ctex-fontset-custom && \
+    echo "% Custom fontset for ctex" > /usr/local/texlive/texmf-local/tex/latex/ctex-fontset-custom/ctex-fontset-custom.def && \
+    echo "\\setCJKmainfont{WenQuanYi Micro Hei}" >> /usr/local/texlive/texmf-local/tex/latex/ctex-fontset-custom/ctex-fontset-custom.def && \
+    echo "\\setCJKsansfont{WenQuanYi Micro Hei}" >> /usr/local/texlive/texmf-local/tex/latex/ctex-fontset-custom/ctex-fontset-custom.def && \
+    echo "\\setCJKmonofont{WenQuanYi Micro Hei Mono}" >> /usr/local/texlive/texmf-local/tex/latex/ctex-fontset-custom/ctex-fontset-custom.def && \
+    mktexlsr
+
+# 复制requirements文件并安装Python依赖
+COPY requirements-latex-server.txt .
+RUN pip3 install --no-cache-dir -r requirements-latex-server.txt
+
+# 复制服务器代码
+COPY latex_compile_server.py .
+
+# 创建工作目录
+RUN mkdir -p /tmp/latex_work && chmod 777 /tmp/latex_work
+
+# 设置环境变量
+ENV HOST=0.0.0.0
+ENV PORT=9851
+ENV PYTHONUNBUFFERED=1
+
+# 暴露端口
+EXPOSE 9851
+
+# 健康检查
+HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
+    CMD curl -f http://localhost:9851/health || exit 1
+
+# 启动服务
+CMD ["python3", "latex_compile_server.py"]

@@ -1,0 +1,28 @@
+# FastAPI 核心框架和服务器
+fastapi==0.104.1
+uvicorn[standard]==0.24.0
+
+# 数据验证和序列化
+pydantic==2.5.0
+
+# HTTP 客户端
+httpx==0.25.2
+requests==2.31.0
+
+# 文件上传支持
+python-multipart==0.0.6
+
+# 类型支持
+typing-extensions==4.8.0
+
+# JWT支持（如果需要认证）
+python-jose[cryptography]==3.3.0
+
+# 系统信息
+psutil==5.9.6
+
+# 日期时间处理
+python-dateutil==2.8.2
+
+# MQTT支持（如果需要）
+asyncio-mqtt==0.13.0
