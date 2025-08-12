@@ -430,7 +430,8 @@ def create_gradio_interface():
         gr.HTML("""
         <div class="header">
             <h1>🌍 ChinArXiv论文翻译器</h1>
-            <p>参考gpt_academic，单独抽取出的arxiv论文翻译功能，润色和对话功能，返回请使用https://academic.chatpaper.top</p>
+            <p>参考gpt_academic，单独抽取出的arxiv论文翻译功能，润色和对话功能，返回请使用https://academic.chatpaper.top.</p>
+            <p>有些论文的编译只能返回tex文件，是编译失败，后面我再修复一下Bug。</p>
         </div>
         """)
         
