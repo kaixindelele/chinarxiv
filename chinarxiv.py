@@ -62,26 +62,17 @@ class ArxivTranslatorWebUI:
         """初始化网页界面"""
         # 创建必要目录
         self.cache_dir = Path("./arxiv_cache")
-        self.output_dir = Path("./output")
-        self.work_dir = Path("./work")
-        self.translation_cache_dir = Path("./translation_cache")
+        self.translation_cache_dir = Path("./arxiv_cache")
         
-        for dir_path in [self.cache_dir, self.output_dir, self.work_dir, self.translation_cache_dir]:
-            dir_path.mkdir(exist_ok=True)
+        # 创建基础缓存目录
+        self.cache_dir.mkdir(exist_ok=True)
         
         # 缓存元数据文件
         self.cache_metadata_file = self.translation_cache_dir / "cache_metadata.json"
         self.cache_metadata = self.load_cache_metadata()
         
-        # 初始化翻译器
-        self.translator = ArxivTranslator(
-            cache_dir=str(self.cache_dir),
-            output_dir=str(self.output_dir),
-            work_dir=str(self.work_dir),
-            api_key=API_KEY,
-            base_url=BASE_URL,
-            llm_model=LLM_MODEL
-        )
+        # 翻译器将在翻译时动态初始化，因为需要arxiv_id来确定路径
+        self.translator = None
         
         # 当前翻译状态
         self.current_translation = {
@@ -160,37 +151,29 @@ class ArxivTranslatorWebUI:
         try:
             cache_key, arxiv_id = self.get_cache_key(arxiv_input, user_requirements, user_terms)
             
-            # 复制文件到缓存目录
+            # 翻译结果已经在正确的位置（./arxiv_cache/arxiv_id/translation/），
+            # 只需要更新缓存元数据，不需要复制文件
             result_file = Path(result_path)
             if result_file.exists():
-                # 生成缓存文件名
-                timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-                cache_filename = f"arxiv_{arxiv_id}_{timestamp}_{result_file.suffix}"
-                cache_file_path = self.translation_cache_dir / cache_filename
-                
-                # 复制文件
-                import shutil
-                shutil.copy2(result_file, cache_file_path)
-                
                 # 更新缓存元数据
                 self.cache_metadata[cache_key] = {
                     'arxiv_id': arxiv_id,
                     'arxiv_input': arxiv_input,
                     'user_requirements': user_requirements,
                     'user_terms': user_terms,
-                    'file_path': str(cache_file_path),
+                    'file_path': result_path,  # 直接使用原始路径
                     'original_path': result_path,
                     'created_time': datetime.now().isoformat(),
-                    'file_size': cache_file_path.stat().st_size
+                    'file_size': result_file.stat().st_size
                 }
                 
                 self.save_cache_metadata()
-                logger.info(f"翻译结果已缓存: {arxiv_id} -> {cache_file_path}")
+                logger.info(f"翻译结果已缓存: {arxiv_id} -> {result_path}")
                 
         except Exception as e:
             logger.error(f"添加缓存失败: {e}")
     
-    def translate_paper(self, 
+    def translate_paper(self,
                        arxiv_input: str,
                        user_requirements: str = "",
                        user_terms_text: str = "",
@@ -213,6 +196,28 @@ class ArxivTranslatorWebUI:
                 'result_path': None,
                 'error': None
             }
+            
+            # 解析arxiv_id以确定目录结构
+            from step1_arxiv_downloader import ArxivDownloader
+            downloader = ArxivDownloader()
+            success_parse, arxiv_id, _ = downloader.parse_arxiv_input(arxiv_input)
+            
+            if not success_parse:
+                return "❌ 无法解析arxiv输入", None, "输入格式错误"
+            
+            # 根据arxiv_id创建专用目录
+            arxiv_translation_dir = self.cache_dir / arxiv_id / "translation"
+            arxiv_translation_dir.mkdir(parents=True, exist_ok=True)
+            
+            # 动态初始化翻译器，使用arxiv_id专用目录
+            self.translator = ArxivTranslator(
+                cache_dir=str(self.cache_dir),
+                output_dir=str(arxiv_translation_dir),
+                work_dir=str(arxiv_translation_dir),
+                api_key=API_KEY,
+                base_url=BASE_URL,
+                llm_model=LLM_MODEL
+            )
             
             # 解析用户术语
             user_terms = {}
@@ -374,13 +379,27 @@ class ArxivTranslatorWebUI:
     def clear_cache(self) -> str:
         """清理缓存"""
         try:
-            # 删除缓存文件
+            # 删除缓存文件和目录
             deleted_count = 0
             for cache_info in self.cache_metadata.values():
                 cache_file = Path(cache_info['file_path'])
                 if cache_file.exists():
                     cache_file.unlink()
                     deleted_count += 1
+                
+                # 尝试删除对应的arxiv_id目录（如果为空）
+                arxiv_id = cache_info.get('arxiv_id')
+                if arxiv_id:
+                    arxiv_dir = self.cache_dir / arxiv_id
+                    if arxiv_dir.exists():
+                        try:
+                            # 只删除translation目录下的内容，保留其他内容（如源码）
+                            translation_dir = arxiv_dir / "translation"
+                            if translation_dir.exists():
+                                import shutil
+                                shutil.rmtree(translation_dir)
+                        except Exception as e:
+                            logger.warning(f"清理translation目录失败: {e}")
             
             # 清空元数据
             self.cache_metadata.clear()
@@ -552,7 +571,7 @@ def main():
     print(f"   LLM模型: {LLM_MODEL}")
     print(f"   API地址: {BASE_URL}")
     print(f"   缓存目录: {web_ui.cache_dir}")
-    print(f"   输出目录: {web_ui.output_dir}")
+    # print(f"   输出目录: {web_ui.output_dir}")
     
     # 创建并启动界面
     interface = create_gradio_interface()
@@ -564,7 +583,7 @@ def main():
     # 启动服务
     interface.launch(
         server_name="0.0.0.0",  # 允许外部访问
-        server_port=12985,       # 端口
+        server_port=12211,       # 端口
         share=False,            # 不创建公共链接
         debug=False,            # 生产环境关闭debug
         show_error=True,        # 显示错误信息

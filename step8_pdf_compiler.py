@@ -52,9 +52,9 @@ class TranslationPDFCompiler:
     4. 提供增强的错误诊断
     """
     
-    def __init__(self, 
+    def __init__(self,
                  server_url: str = "http://localhost:9851",
-                 output_dir: str = "./output",
+                 output_dir: str = "./arxiv_cache",  # 默认改为arxiv_cache
                  keep_tex_files: bool = True,
                  auto_start_server: bool = True):
         """
@@ -604,7 +604,7 @@ class TranslationPDFCompiler:
 def compile_translation_to_pdf(latex_content: str,
                               output_name: str = "translated",
                               arxiv_id: str = None,
-                              output_dir: str = "./output",
+                              output_dir: str = "./arxiv_cache",  # 默认改为arxiv_cache
                               source_dir: str = None) -> Tuple[bool, str]:
     """
     便捷函数：编译翻译后的LaTeX文档为PDF（完整参考文献支持）
@@ -653,7 +653,7 @@ def main():
     # 创建编译器
     print("初始化LaTeX翻译PDF编译器...")
     compiler = TranslationPDFCompiler(
-        output_dir="./output",
+        output_dir="./arxiv_cache",  # 默认改为arxiv_cache
         keep_tex_files=True,
         auto_start_server=True
     )

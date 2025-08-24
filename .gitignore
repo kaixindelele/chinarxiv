@@ -9,3 +9,11 @@ o3_prompt.md
 config.py
 translation_cache/*
 work/*
+test_arxiv_cache/*
+gpt_academic/*
+_upstream/*
+1911.05722.pdf
+统计输出结果.sh
+gradio_down.py
+static/index.html
+docs/latex_diff.md

@@ -60,10 +60,10 @@ class ArxivTranslator:
     4. 处理错误和异常
     """
     
-    def __init__(self, 
+    def __init__(self,
                  cache_dir: str = "./arxiv_cache",
-                 output_dir: str = "./output", 
-                 work_dir: str = "./work",
+                 output_dir: str = "./arxiv_cache",  # 默认改为arxiv_cache，实际使用时会传入具体路径
+                 work_dir: str = "./arxiv_cache",   # 默认改为arxiv_cache，实际使用时会传入具体路径
                  api_key: str = "",
                  base_url: str = "",
                  llm_model: str = "gpt-4o-mini",
@@ -433,7 +433,7 @@ class ArxivTranslator:
 def translate_arxiv_paper(arxiv_input: str,
                          user_requirements: str = "保持学术性和专业性，确保术语翻译的一致性",
                          user_terms: Dict[str, str] = None,
-                         output_dir: str = "./output",
+                         output_dir: str = "./arxiv_cache",  # 默认改为arxiv_cache
                          api_key: str = "",
                          base_url: str = "",
                          llm_model: str = "",
@@ -551,9 +551,9 @@ def main():
     # # 创建翻译器
     # print(f"\n创建Arxiv翻译器...")
     # translator = ArxivTranslator(
-    #     output_dir="./output",
+    #     output_dir="./arxiv_cache",
     #     cache_dir="./arxiv_cache",
-    #     work_dir="./work"
+    #     work_dir="./arxiv_cache"
     # )
     
     # # 执行翻译
@@ -607,7 +607,7 @@ def main():
     # 只测试tex生成，跳过PDF编译避免重复
     success, result = translate_arxiv_paper(
         arxiv_input=test_arxiv_id,
-        output_dir="./output",
+        output_dir="./arxiv_cache",
         compile_pdf=True,  # 跳过PDF编译，避免重复测试
         api_key=API_KEY,
         base_url=BASE_URL,
