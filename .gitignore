@@ -17,3 +17,7 @@ _upstream/*
 gradio_down.py
 static/index.html
 docs/latex_diff.md
+migrate_translation_files.py
+migration_guide.md
+migration_report.txt
+update_metadata_paths.py

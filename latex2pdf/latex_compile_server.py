@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+l#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
 LaTeX编译服务器 - 支持依赖文件处理（修复编码问题）
@@ -347,7 +347,7 @@ class LaTeXCompiler:
                 compile_log.append("第2步: 执行第二次pdflatex编译（处理交叉引用）")
                 success = self._run_latex_command("pdflatex", tex_filename, compile_log, 2)
             
-            # 检查最终是否生成了PDF
+            # 检查最终是否生成了PDF - 关键修改：只要PDF文件存在就认为成功
             if not pdf_file_path.exists():
                 error_msg = "PDF文件生成失败"
                 compile_log.append(error_msg)
@@ -368,6 +368,9 @@ class LaTeXCompiler:
                     error=error_msg,
                     log="\n".join(compile_log)
                 )
+            else:
+                # PDF文件存在，即使有编译警告也认为成功
+                compile_log.append(f"PDF文件已生成: {pdf_file_path}")
             
             # 读取生成的PDF文件
             compile_log.append(f"读取PDF文件: {pdf_file_path}")
@@ -445,9 +448,16 @@ class LaTeXCompiler:
                 compile_log.append(f"{command}编译错误 (第{round_num}次):")
                 compile_log.append(result.stderr)
             
-            # 检查返回码
+            # 修改逻辑：检查是否生成了PDF文件，而不仅仅依赖返回码
+            output_name = tex_filename.replace('.tex', '')
+            pdf_file_path = self.work_dir / f"{output_name}.pdf"
+            
             if result.returncode == 0:
                 compile_log.append(f"第{round_num}次{command}编译成功")
+                return True
+            elif pdf_file_path.exists():
+                # 即使返回码不为0，但如果PDF文件存在，也认为编译成功（可能只是警告）
+                compile_log.append(f"第{round_num}次{command}编译有警告但生成了PDF，返回码: {result.returncode}")
                 return True
             else:
                 compile_log.append(f"第{round_num}次{command}编译失败，返回码: {result.returncode}")

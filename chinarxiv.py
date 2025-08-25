@@ -450,7 +450,8 @@ def create_gradio_interface():
         <div class="header">
             <h1>🌍 ChinArXiv论文翻译器</h1>
             <p>参考gpt_academic，单独抽取出的arxiv论文翻译功能，润色和对话功能，返回请使用https://academic.chatpaper.top.</p>
-            <p>有些论文的编译只能返回tex文件，是编译失败，后面我再修复一下Bug。</p>
+            <p>有些论文的编译只能返回tex文件，是编译失败，后面我再修复一下Bug，目前成功率大概有8成左右。</p>
+            <p>开源代码：https://github.com/kaixindelele/chinarxiv，欢迎点个star。</p>
         </div>
         """)
         
@@ -583,7 +584,7 @@ def main():
     # 启动服务
     interface.launch(
         server_name="0.0.0.0",  # 允许外部访问
-        server_port=12211,       # 端口
+        server_port=12985,       # 端口
         share=False,            # 不创建公共链接
         debug=False,            # 生产环境关闭debug
         show_error=True,        # 显示错误信息

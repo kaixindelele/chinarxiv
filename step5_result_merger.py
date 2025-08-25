@@ -54,7 +54,7 @@ class LaTeXResultMerger:
             "*{\\scriptsize\\textbf{警告：该PDF由GPT-Academic开源项目调用大语言模型+Latex翻译插件一键生成，"
             "版权归原文作者所有。翻译内容可靠性无保障，请仔细鉴别并以原文为准。"
             "项目Github地址 \\url{https://github.com/binary-husky/gpt_academic}。"
-            "免费使用网页：\\url{https://academic.chatpaper.top/}。"
+            "免费使用网页：\\url{https://chinarxiv.chatpaper.top}。"
         )
         
         self.warning_declare = (
