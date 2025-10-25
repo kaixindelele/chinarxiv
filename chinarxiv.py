@@ -501,13 +501,26 @@ def create_gradio_interface():
                 detail_output = gr.Textbox(
                     label="详细信息",
                     interactive=False,
-                    lines=10
+                    lines=6
                 )
                 
                 file_output = gr.File(
                     label="下载翻译结果",
-                    interactive=False
+                    interactive=False,
                 )
+
+                # 感谢支持
+                gr.HTML("""
+                <div class="status-card" style="margin-top: 20px;">
+                    <h3>💖 感谢支持</h3>
+                    <div style="text-align: center; padding: 10px;">
+                        <img src="https://github.com/kaixindelele/chinarxiv/blob/main/static/sponsor.jpg?raw=true" alt="感谢支持" style="width: 80%; border-radius: 8px;">
+                    </div>
+                    <div style="text-align: center; padding: 10px; font-size: 14px; color: #666;">
+                        如有问题反馈，请加QQ群816116844
+                    </div>
+                </div>
+                """)
                 
             with gr.Column(scale=1):
                 # 缓存管理区域

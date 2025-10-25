@@ -1,4 +1,4 @@
-l#!/usr/bin/env python3
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
 LaTeX编译服务器 - 支持依赖文件处理（修复编码问题）
