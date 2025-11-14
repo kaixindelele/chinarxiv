@@ -70,4 +70,5 @@ services:
 networks:
   default:
     name: latex_network
-    driver: bridge
+    external: true
+    # driver: bridge

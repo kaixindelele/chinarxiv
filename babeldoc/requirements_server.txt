@@ -1,0 +1,16 @@
+# BabelDoc Server 依赖
+
+# FastAPI 和 Web 服务器
+fastapi>=0.104.0
+uvicorn[standard]>=0.24.0
+
+# HTTP 客户端（用于测试和示例客户端）
+requests>=2.31.0
+
+# TOML 配置文件支持（Python < 3.11 需要）
+tomli>=2.0.0; python_version < '3.11'
+
+# 可选：开发工具
+# pytest>=7.4.0  # 单元测试
+# httpx>=0.25.0  # 异步 HTTP 客户端（用于测试）
+

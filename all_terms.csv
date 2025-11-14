@@ -1,0 +1,49 @@
+source,target,tgt_lng
+agent,智能体,zh-CN
+environment,环境,zh-CN
+state,状态,zh-CN
+action,动作,zh-CN
+reward,奖励,zh-CN
+policy,策略,zh-CN
+value,价值,zh-CN
+model,模型,zh-CN
+exploration,探索,zh-CN
+exploitation,利用,zh-CN
+model-free,无模型,zh-CN
+model-based,有模型,zh-CN
+value-based,基于价值,zh-CN
+policy-based,基于策略,zh-CN
+transition,转移元组,zh-CN
+buffer,经验池,zh-CN
+replay,回放,zh-CN
+experience,经验,zh-CN
+episode,回合,zh-CN
+epoch,轮次,zh-CN
+zero-shot,零样本,zh-CN
+one-shot,一次样本,zh-CN
+few-shot,少样本,zh-CN
+long horizon,长视角,zh-CN
+demonstration,示教,zh-CN
+mask,掩码,zh-CN
+teleoperation,遥操作,zh-CN
+simulation,仿真,zh-CN
+simulat,仿真,zh-CN
+token,标记（Token）,zh-CN
+representation,表征,zh-CN
+ground truth,真实值,zh-CN
+latent space,隐空间,zh-CN
+hidden variable,隐变量,zh-CN
+latent variable,隐变量,zh-CN
+perplexity,困惑度,zh-CN
+representation learning,表征学习,zh-CN
+cluster,簇,zh-CN
+outlier,异常点,zh-CN
+oracle,oracle,zh-CN
+naive,naive,zh-CN
+boosting,boosting,zh-CN
+normalization,normalization,zh-CN
+reward shaping,reward shaping,zh-CN
+transformer,transformer,zh-CN
+actor-critic,actor-critic,zh-CN
+off-policy,off-policy,zh-CN
+on-policy,on-policy,zh-CN

@@ -79,7 +79,7 @@ class LaTeXCompileClient:
         """
         try:
             print(f"正在检查服务器健康状态: {self.health_endpoint}")
-            response = requests.get(self.health_endpoint, timeout=10)
+            response = requests.get(self.health_endpoint, timeout=10, proxies={'http': None, 'https': None})
             
             if response.status_code == 200:
                 health_data = response.json()
@@ -176,7 +176,8 @@ class LaTeXCompileClient:
             response = requests.post(
                 self.compile_sync_endpoint,
                 json=request_data,
-                timeout=self.timeout
+                timeout=self.timeout,
+                proxies={'http': None, 'https': None}
             )
             
             # 处理响应
@@ -288,7 +289,8 @@ class LaTeXCompileClient:
             response = requests.post(
                 self.compile_async_endpoint,
                 json=request_data,
-                timeout=30  # 异步提交超时时间较短
+                timeout=30,  # 异步提交超时时间较短
+                proxies={'http': None, 'https': None}
             )
             
             # 处理响应
@@ -340,7 +342,8 @@ class LaTeXCompileClient:
         try:
             response = requests.get(
                 f"{self.status_endpoint}/{task_id}",
-                timeout=10
+                timeout=10,
+                proxies={'http': None, 'https': None}
             )
             
             if response.status_code == 200:

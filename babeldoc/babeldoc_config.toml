@@ -1,0 +1,57 @@
+[babeldoc]
+# 基础设置
+debug = false
+lang-in = "en-US"
+lang-out = "zh-CN"
+qps = 10
+output = "/home/lyl/academic/chinarxiv/babeldoc_output"
+
+# PDF处理选项
+split-short-lines = false
+short-line-split-factor = 0.8
+skip-clean = false
+dual-translate-first = false
+disable-rich-text-translate = false
+use-alternating-pages-dual = false
+watermark-output-mode = "watermarked"  # 选项: "watermarked", "no_watermark", "both"
+max-pages-per-part = 50
+only-include-translated-page = false # 仅在输出PDF中包含翻译页面。仅在使用`pages`时有效。
+skip-scanned-detection = false  # 跳过扫描文档检测以加快处理速度
+# auto-extract-glossary = true # 设置为 false 以禁用自动术语提取
+# formular-font-pattern = "" # 公式文本的字体模式
+# formular-char-pattern = "" # 公式文本的字符模式
+# show-char-box = false # 显示字符边界框（调试）
+# ocr-workaround = false # 对扫描PDF使用OCR解决方案
+# rpc-doclayout = "" # 文档布局分析的RPC服务主机
+# working-dir = "" # 翻译工作目录
+# auto-enable-ocr-workaround = false # 为扫描PDF启用自动OCR解决方案
+# skip-form-render = false # 跳过表单渲染
+# skip-curve-render = false # 跳过曲线渲染
+# only-parse-generate-pdf = false # 仅解析PDF并生成输出PDF而不翻译
+# remove-non-formula-lines = false # 从段落区域删除非公式线条
+# non-formula-line-iou-threshold = 0.2 # 段落重叠检测的IoU阈值
+# figure-table-protection-threshold = 0.3 # 图表保护的IoU阈值
+custom-system-prompt = "保持学术性和专业性，确保术语翻译的一致性"
+
+# 翻译服务
+openai = true
+openai-model = "gpt-4o-mini"
+openai-base-url = "https://apis.bltcy.ai/v1"
+openai-api-key = "sk-wgfnICtif7oeeCuZD3D2E3D09c7a43D6954a697eAb2b8dB7"
+enable-json-mode-if-requested = false  # 在请求时启用JSON模式
+pool-max-workers = 5  # 任务处理的最大工作线程数（如果未设置则默认为QPS值）
+
+# 术语表选项（可选）
+# glossary-files = "all_terms.csv"
+
+# 输出控制
+no-dual = false
+no-mono = false
+min-text-length = 5
+report-interval = 0.5
+
+# 离线资源管理
+# 根据需要取消注释以下选项之一：
+# generate-offline-assets = "/path/to/output/dir"
+# restore-offline-assets = "/path/to/offline_assets_package.zip"
+
