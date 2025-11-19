@@ -28,7 +28,8 @@ mask,掩码,zh-CN
 teleoperation,遥操作,zh-CN
 simulation,仿真,zh-CN
 simulat,仿真,zh-CN
-token,标记（Token）,zh-CN
+token,token,zh-CN
+embedding,embedding,zh-CN
 representation,表征,zh-CN
 ground truth,真实值,zh-CN
 latent space,隐空间,zh-CN
