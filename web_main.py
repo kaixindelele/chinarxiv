@@ -458,6 +458,7 @@ async def translate_upload(
     file: UploadFile = File(...),
     user_requirements: str = Form("保持学术性和专业性，确保术语翻译的一致性"),
     output_bilingual: bool = Form(False),
+    force_retranslate: bool = Form(False),
     background_tasks: BackgroundTasks = None
 ):
     """
@@ -502,7 +503,8 @@ async def translate_upload(
         str(file_path),
         filename,
         user_requirements,
-        output_bilingual
+        output_bilingual,
+        force_retranslate
     )
     
     return {
@@ -773,7 +775,8 @@ def translate_upload_task_sync(
     pdf_path: str,
     filename: str,
     user_requirements: str,
-    output_bilingual: bool
+    output_bilingual: bool,
+    force_retranslate: bool
 ):
     """上传文件翻译任务（同步版本，在线程池中运行）"""
     status = translation_tasks[task_id]
@@ -784,18 +787,19 @@ def translate_upload_task_sync(
         status.set_progress(5)
         
         # 检查是否已有翻译缓存
-        status.add_log("检查翻译缓存...")
-        cached_files = cache_manager.check_local_pdf_cache(pdf_path, output_bilingual)
-        
-        if cached_files:
-            status.add_log(f"找到已翻译的文件，使用缓存结果")
-            for f in cached_files:
-                status.add_result_file(f)
-                status.add_log(f"缓存文件: {Path(f).name}")
-            status.set_status("completed")
-            status.set_progress(100)
-            status.add_log("翻译完成（使用缓存）！")
-            return
+        if not force_retranslate:
+            status.add_log("检查翻译缓存...")
+            cached_files = cache_manager.check_local_pdf_cache(pdf_path, output_bilingual)
+            
+            if cached_files:
+                status.add_log(f"找到已翻译的文件，使用缓存结果")
+                for f in cached_files:
+                    status.add_result_file(f)
+                    status.add_log(f"缓存文件: {Path(f).name}")
+                status.set_status("completed")
+                status.set_progress(100)
+                status.add_log("翻译完成（使用缓存）！")
+                return
         
         status.add_log("未找到缓存，开始新的翻译任务")
         status.set_progress(10)

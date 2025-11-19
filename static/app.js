@@ -226,6 +226,7 @@ async function translateUpload() {
     formData.append('file', selectedFile);
     formData.append('user_requirements', elements.userRequirements.value);
     formData.append('output_bilingual', elements.outputBilingual.checked);
+    formData.append('force_retranslate', elements.forceRetranslate.checked);
     
     setTranslateButtonLoading(true);
     
